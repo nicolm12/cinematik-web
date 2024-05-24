@@ -41,7 +41,7 @@ function App() {
     
       setLoading(false); 
       
-      setMovies([]); 
+      
     }
   };
   const fetchCard = async (id) => {
@@ -75,16 +75,15 @@ function App() {
   };
   useEffect(() => {
     if (searchKey.trim() === "") {
-      // Si no se ha ingresado ninguna palabra en la búsqueda
-      setMovies([]); // Vacía la lista de películas
-      setLoading(false); // Detiene la carga
-      return;
+      
+      setMovies([0]); 
+      setLoading(false); 
     }
   
-    // Realiza la búsqueda normalmente si se ha ingresado una palabra en la búsqueda
+    
     setLoading(true); // Inicia la carga
     fetchMovies();
-  }, [searchKey]);
+  }, []);
   
   return (
     <div>
