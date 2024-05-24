@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback} from "react";
 import axios from "axios";
 import "./App.css";
 import Card from "./components/Card/Card";
@@ -19,7 +19,7 @@ function App() {
   const [popup, setPopup] = useState(false);
 
   //peticion get a la api
-  const fetchMovies = async (searchKey) => {
+  const fetchMovies = useCallback(async (searchKey) => {
     const type = searchKey ? "search" : "discover";
     const {
       data: { results },
@@ -35,7 +35,7 @@ function App() {
     if (results.length) {
       await fetchCard(results[0].id);
     }
-  };
+  }, []);
   const fetchCard = async (id) => {
     const { data } = await axios.get(`${API_URL}/movie/${id}`, {
       params: {
@@ -66,8 +66,8 @@ function App() {
     fetchMovies(searchKey);
   };
   useEffect(() => {
-    fetchMovies();
-  }, []);
+    fetchMovies(searchKey);
+  }, [fetchMovies, searchKey]);
   return (
     <div>
       <Header
