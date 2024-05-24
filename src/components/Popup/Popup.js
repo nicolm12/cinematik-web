@@ -1,6 +1,5 @@
 import React from "react";
 import "./Popup.css";
-import YouTube from "react-youtube"; 
 import { RxCross2 } from "react-icons/rx";
 import { BiSolidStar } from "react-icons/bi";
 
@@ -25,7 +24,7 @@ const Popup = ({
           <div className="content">
             <div>
               
-              <img className="imagen" src={image} />
+              <img className="imagen" alt={movieTitle} src={image} />
               
               <div className="information">
               <button className="popup-close" onClick={onClose}>

@@ -15,33 +15,25 @@ function App() {
   const [searchKey, setSearchKey] = useState("");
   const [trailer, setTrailler] = useState(null);
   const [movie, setMovie] = useState({ title: "Loading Movies" });
-  const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [popup, setPopup] = useState(false);
 
+  //peticion get a la api
   const fetchMovies = async (searchKey) => {
-    try {
-      const type = searchKey ? "search" : "discover";
-      const {
-        data: { results },
-      } = await axios.get(`${API_URL}/${type}/movie`, {
-        params: {
-          api_key: API_KEY,
-          query: searchKey,
-        },
-      });
-      setMovies(results);
-      setMovie(results[0]);
-      setLoading(false);
-      if (results.length) {
-        await fetchCard(results[0].id);
-      }
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-    
-      setLoading(false); 
-      
-      
+    const type = searchKey ? "search" : "discover";
+    const {
+      data: { results },
+    } = await axios.get(`${API_URL}/${type}/movie`, {
+      params: {
+        api_key: API_KEY,
+        query: searchKey,
+      },
+    });
+    setMovies(results);
+    setMovie(results[0]);
+    setLoading(false);
+    if (results.length) {
+      await fetchCard(results[0].id);
     }
   };
   const fetchCard = async (id) => {
@@ -74,17 +66,8 @@ function App() {
     fetchMovies(searchKey);
   };
   useEffect(() => {
-    if (searchKey.trim() === "") {
-      
-      setMovies([0]); 
-      setLoading(false); 
-    }
-  
-    
-    setLoading(true); // Inicia la carga
     fetchMovies();
   }, []);
-  
   return (
     <div>
       <Header
@@ -98,15 +81,16 @@ function App() {
             <AiOutlineLoading3Quarters size={70} color="#fff" />
             <h1>Cargando...</h1>
           </div>
-        ) : movies.length > 0 ? (
+        ) : movies.length > 0? (
           movies.map((movie) => (
-            <Card
+            movie?( <Card
               key={movie.id} // Provide a unique key for each element in the list
               movieId={movie.id}
               urlImage={`${URL_IMAGE}${movie.poster_path}`}
               movieTitle={movie.title}
               onClick={() => selectMovie(movie)}
-            />
+            />):( <p>No movies found</p>)
+           
           ))
         ) : (
           <p>No movies found</p>
@@ -120,12 +104,9 @@ function App() {
         trailer={trailer}
         movieTitle={movie.title}
         movieOverview={movie.overview}
-        openTrailer={() => setPlaying(true)}
         relaseDate={movie.release_date}
         vote={movie.vote_average}
         totalVotes={movie.vote_count}
-       
-
       />
     </div>
   );
